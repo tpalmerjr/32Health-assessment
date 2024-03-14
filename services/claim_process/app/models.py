@@ -12,7 +12,7 @@ class ClaimBase(BaseModel):
     member_coinsurance: float
     member_copay: float
     allowed_fees: float
-    quadrant: str
+    quadrant: Optional[str]
     subscriber_num: str
     plan_group: str
     service_date: str
