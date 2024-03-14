@@ -21,7 +21,7 @@ def convert_db_claim_model_to_claim_output_model(claim: Claim) -> ClaimOutput:
     return ClaimOutput(**dict(claim.__dict__))
 
 
-def calculate_net_fee(claim_model: ClaimInput):
+def calculate_net_fee(claim_model: ClaimInput) -> float:
     """
     Calculates the net_fee for a claim.
     :param claim_model: ClaimInput
@@ -35,10 +35,16 @@ def calculate_net_fee(claim_model: ClaimInput):
     )
 
 
-def compute_top_10_provider_npis(claims_data):
+def compute_top_10_provider_npis(claims_data: [Claim]) -> [str]:
+    """
+    Calculates the top 10 NPIs.
+    :param claims_data: List(Claim)
+    :return: [str]
+    """
     provider_net_fees = {}  # HashMap to store provider_npi as keys and net fees as values
 
     # Calculate net fee for each claim and update the hashmap
+    # This step could be avoided by using the calculated net_fee value stored in the database
     for claim in claims_data:
         provider_npi = claim[0]
         net_fee = claim[1] + claim[2] + claim[3] - claim[4]

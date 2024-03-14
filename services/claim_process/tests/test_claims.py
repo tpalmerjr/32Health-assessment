@@ -10,7 +10,6 @@ client = TestClient(app)
 # Test creating a claim
 def test_process_claim_endpoint():
     # Test data for claim
-
     claim_data = {
         "submitted_procedure": "D123456",
         "provider_npi": "4561239870",
@@ -27,19 +26,17 @@ def test_process_claim_endpoint():
     # Make POST request to /claims/ endpoint
     response = client.post("/", json=claim_data)
 
-    print("Response", response)
-
-    response_json = response.json()
-
     # Verify response status code
     assert response.status_code == 200
 
+    data = response.json()
+
     # Verify response data contains calculated values
-    assert "id" in response_json
-    assert "net_fee" in response_json
+    assert "id" in data
+    assert "net_fee" in data
 
     # Verify response data calculations are correct
-    assert response_json["net_fee"] == (
+    assert data["net_fee"] == (
         claim_data["provider_fees"]
         + claim_data["member_coinsurance"]
         + claim_data["member_copay"]
@@ -69,22 +66,37 @@ def sample_claims_data():
     ]
 
 
+# Test Top 10 Provider NPIs logic
 def test_compute_top_10_provider_npis(sample_claims_data):
+    # Execute the algorithm to compute the top 10 provider npis
     top_provider_npis = compute_top_10_provider_npis(sample_claims_data)
+
+    # Verify that the length of the algorithm output is equal to 10
     assert len(top_provider_npis) == 10
-    print(top_provider_npis)
+
+    # Verify that the list returned by the algorithm is equal to the provided list
     assert top_provider_npis == [
         '9876543212', '9876543211', '9876543210', '0987654325', '0987654323',
         '0987654321', '1234567894', '1234567892', '1234567890', '0987654326']
 
 
-# Test the endpoint directly
+# Test the Top Providers endpoint
 def test_top_providers_endpoint():
+    # Make GET request to /top-providers/ endpoint
     response = client.get("/top-providers/")
+
+    # Verify response status code
     assert response.status_code == 200
+
     data = response.json()
+
+    # Verify the response data is a list
     assert isinstance(data, list)
+
+    # Verify the response data list contains no more than 10 records (npis)
     assert len(data) <= 10
+
+    # Verify that for each NPI that it is a string and is 10 digits
     for provider_npi in data:
         assert isinstance(provider_npi, str)
         assert len(provider_npi) == 10

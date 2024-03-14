@@ -7,8 +7,9 @@ app = FastAPI()
 # CORS
 origins = [
     "http://localhost",
-    "http://localhost:8080",
 ]
+
+# Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -17,4 +18,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Included Routes
 app.include_router(payments_router, prefix="", tags=["Payments"])

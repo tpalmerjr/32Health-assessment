@@ -13,6 +13,7 @@ async def process_claim(claim: ClaimInput):
     return add_claim(claim)
 
 
+# Obtain the top 10 provider NIPs
 @router.get("/top-providers")
 @limiter.limit("10/minute")
 async def retrieve_top_providers(request: Request):
