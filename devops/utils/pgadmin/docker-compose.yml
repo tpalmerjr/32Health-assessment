@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+#    restart: always
+    platform: linux/amd64
+    env_file:
+      - .env
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin/
+    depends_on:
+      - db-backend
+
+volumes:
+  pgadmin_data:

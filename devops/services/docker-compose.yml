@@ -1,0 +1,3 @@
+include:
+  - path: claim_process/docker-compose.yml
+  - path: payments/docker-compose.yml

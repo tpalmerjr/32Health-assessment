@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  claim_process-service:
+    extends:
+      file: ../base/docker-compose.yml
+      service: api-services
+    env_file:
+      - .env
+      - ${env}/.env
+      - ../../db/postgres/${env}/.env
+    depends_on:
+      - db-backend
