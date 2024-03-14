@@ -12,9 +12,7 @@ from utils.claim_process import limiter, app
 # Execute DB Model Schema
 SQLModel.metadata.create_all(engine)
 
-# app = FastAPI()
-
-# limiter = Limiter(key_func=get_remote_address)
+# Adding limiter and exception handler to app
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
